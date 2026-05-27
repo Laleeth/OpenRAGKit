@@ -1,0 +1,28 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATA_DIR=/app/data
+      - UPLOADS_DIR=/app/data/uploads
+      - CHROMA_DIR=/app/data/chroma
+      - SQLITE_PATH=/app/data/app.db
+    volumes:
+      - ./data:/app/data
+
+  ui:
+    build: .
+    command: ["python", "-m", "ragstarter.ui.gradio_app"]
+    ports:
+      - "7860:7860"
+    environment:
+      - API_BASE_URL=http://api:8000
+      - DATA_DIR=/app/data
+      - UPLOADS_DIR=/app/data/uploads
+      - CHROMA_DIR=/app/data/chroma
+      - SQLITE_PATH=/app/data/app.db
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - api
