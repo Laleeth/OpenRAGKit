@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env
+.venv/
+venv/
+
+data/chroma/
+*.db
+
+.DS_Store
+.idea/
+.vscode/
+node_modules/

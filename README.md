@@ -1,64 +1,93 @@
-# RAG Starter Kit
+# RAGLab
 
-Production-ready starter kit for building retrieval-augmented generation apps over PDFs, Markdown, text, DOCX, HTML, and web pages.
+Production-ready open-source toolkit for building and debugging RAG systems.
 
-## What is included
+## Features
 
-- FastAPI backend with clean modular architecture
-- Persistent Chroma vector store
+- PDF/TXT/Markdown ingestion
+- Semantic chunking pipeline
 - SentenceTransformers embeddings
-- PyMuPDF / python-docx / BeautifulSoup document ingestion
-- Chunking, indexing, search, and chat endpoints
-- OpenAI-compatible LLM provider support
-- Built-in extractive fallback when no API key is set
-- Gradio UI for quick demos
-- SQLite metadata store
-- Docker + docker-compose
-- Seed script and tests
+- ChromaDB vector storage
+- FastAPI backend
+- Gradio UI
+- Persistent vector storage
+- Docker support
+- Modular RAG architecture
+
+---
+
+## Why RAGLab?
+
+Most RAG starter kits stop at:
+
+> Upload PDF → Chat
+
+RAGLab is designed for developers who want:
+- reusable RAG components,
+- production-style architecture,
+- observability,
+- retrieval inspection,
+- and future extensibility.
+
+---
 
 ## Architecture
 
-- `app/api` — HTTP routes
-- `app/services` — ingestion, chunking, embeddings, retrieval, RAG, evaluation
-- `app/db` — SQLite models and session handling
-- `ui/gradio_app.py` — local demo UI
-- `scripts/seed_demo.py` — sample data ingestion
-- `tests/` — unit tests
+```text
+Documents
+   ↓
+Extraction
+   ↓
+Chunking
+   ↓
+Embeddings
+   ↓
+ChromaDB
+   ↓
+Retriever
+   ↓
+LLM
+   ↓
+Grounded Response
+```
 
-## Quick start
+---
 
-### 1) Create an environment
+## Quickstart
+
+### Clone repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/raglab.git
+cd raglab
+```
+
+### Create virtual environment
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-### 2) Install dependencies
+### Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3) Configure env
+### Run backend
 
 ```bash
-cp .env.example .env
+uvicorn app.main:app --reload
 ```
 
-Edit `.env` if needed.
-
-### 4) Run the API
+### Run UI
 
 ```bash
-uvicorn ragstarter.main:app --reload
+python ui/app.py
 ```
 
-### 5) Run the UI
-
-```bash
-python -m ragstarter.ui.gradio_app
-```
+---
 
 ## Docker
 
@@ -66,69 +95,102 @@ python -m ragstarter.ui.gradio_app
 docker compose up --build
 ```
 
-## Typical workflow
+---
 
-1. Upload documents through `POST /documents/upload`
-2. Search with `POST /search`
-3. Chat with `POST /chat`
-4. Inspect metrics with `POST /evaluate`
+## API Endpoints
 
-## API examples
+### Health
 
-### Upload a document
-
-```bash
-curl -X POST "http://localhost:8000/documents/upload"   -F "file=@./examples/sample_policy.md"
+```http
+GET /health
 ```
 
-### Search
+### Ingest document
 
-```bash
-curl -X POST "http://localhost:8000/search"   -H "Content-Type: application/json"   -d '{"query":"What is the refund policy?","top_k":5}'
+```http
+POST /ingest
 ```
 
-### Chat
+### Query documents
 
-```bash
-curl -X POST "http://localhost:8000/chat"   -H "Content-Type: application/json"   -d '{"question":"What is the refund policy?"}'
+```http
+POST /query
 ```
 
-## LLM provider setup
+---
 
-This project works out of the box with an extractive fallback, so it runs without any API key.
+## Example Workflow
 
-For stronger answers, set an OpenAI-compatible endpoint:
+1. Upload PDF
+2. Document gets chunked
+3. Embeddings are generated
+4. Chunks are indexed
+5. Query retrieves relevant context
+6. LLM generates grounded response
 
-```env
-LLM_PROVIDER=openai_compatible
-LLM_BASE_URL=https://api.openai.com/v1
-LLM_API_KEY=...
-LLM_MODEL=gpt-4o-mini
+---
+
+## Project Structure
+
+```text
+raglab/
+│
+├── app/
+├── ui/
+├── tests/
+├── docs/
+├── examples/
+├── assets/
+│
+├── README.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── docker-compose.yml
+└── requirements.txt
 ```
 
-It also supports local Ollama:
+---
 
-```env
-LLM_PROVIDER=ollama
-OLLAMA_BASE_URL=http://localhost:11434
-LLM_MODEL=llama3.1
-```
+## Roadmap
 
-## Why this starter kit is useful
+- [x] Basic RAG pipeline
+- [x] ChromaDB integration
+- [x] FastAPI backend
+- [ ] Hybrid search
+- [ ] Retrieval inspector
+- [ ] Reranking
+- [ ] Hallucination detection
+- [ ] Streaming responses
+- [ ] Ollama integration
+- [ ] Multi-user support
 
-Most RAG demos stop at “upload PDF and ask questions.” This code adds the pieces that matter in practice:
+---
 
-- persistent storage
-- document tracking
-- chunk inspection
-- metadata-aware retrieval
-- citations
-- evaluation hooks
-- production-friendly structure
+## Future Vision
 
-## Notes
+RAGLab aims to evolve into:
 
-- Embeddings are generated with SentenceTransformers.
-- PDFs are parsed with PyMuPDF.
-- Chroma stores vectors persistently on disk.
-- SQLite stores document metadata and ingestion status.
+- RAG observability platform
+- evaluation toolkit
+- retrieval debugger
+- enterprise RAG framework
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+Please open issues and pull requests for:
+- bug fixes,
+- improvements,
+- retrieval strategies,
+- evaluation tooling.
+
+See `CONTRIBUTING.md`.
+
+---
+
+## License
+
+MIT License

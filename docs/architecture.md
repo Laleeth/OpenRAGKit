@@ -1,0 +1,1 @@
+# RAGLab Architecture\n\nThis document explains ingestion, embeddings, retrieval, and generation flow.
