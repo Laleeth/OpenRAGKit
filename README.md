@@ -1,4 +1,4 @@
-# RAGLab
+# OpenRAGKit
 
 Production-ready open-source toolkit for building and debugging RAG systems.
 
