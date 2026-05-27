@@ -1,8 +1,9 @@
 # OpenRAGKit
 
-Production-ready open-source toolkit for building and debugging RAG systems.
+
 <img width="814" height="605" alt="image" src="https://github.com/user-attachments/assets/40721f97-2b29-4194-b36a-d614ee81bcdd" />
 
+## Production-ready open-source toolkit for building and debugging RAG systems.
 ## Features
 
 - PDF/TXT/Markdown ingestion
